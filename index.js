@@ -59,10 +59,10 @@ async function pushDataToFile(fileName, activityData) {
         const fileData = JSON.parse(await fsp.readFile(filePath, "utf8"));
 
         fileData.push(activityData);
-        await fsp.writeFile(filePath, JSON.stringify(fileData), "utf8");
+        await fsp.writeFile(filePath, JSON.stringify(fileData, null, 2), "utf8");
       } else {
         await createDirectory(DATA_DIR);
-        await fsp.writeFile(filePath, JSON.stringify([activityData]), "utf8");
+        await fsp.writeFile(filePath, JSON.stringify([activityData], null, 2), "utf8");
       }
       resolve();
     });
@@ -71,7 +71,7 @@ async function pushDataToFile(fileName, activityData) {
 
 async function processActivity(activity) {
   const now = new Date();
-  const fileName = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}.json`;
+  const fileName = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,"0")}-${now.getDate()}.json`;
   
   await pushDataToFile(`${fileName}`, {
     activity,
